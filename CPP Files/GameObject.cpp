@@ -6,8 +6,10 @@ GameObject::~GameObject(void){
 	}
 }
 
-void GameObject::addSprite(Sprite* x){
-	mySprite = x;
+void GameObject::setSprite(Sprite* newSprite){
+	mySprite = newSprite;
+	x = newSprite->getX();
+	y = newSprite->getY();
 }
 
 void GameObject::removeSprite(){

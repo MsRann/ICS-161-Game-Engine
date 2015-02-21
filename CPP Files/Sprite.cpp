@@ -1,9 +1,3 @@
-//Steven Kawafuchi
-//ID # 56499887
-//ICS 161 Game Engine
-//Professor Frost
-//Winter 2015
-
 #include "Sprite.h"
 #include <string>
 
@@ -79,6 +73,10 @@ Sprite::Sprite(int width, int height, SDL_Renderer* ren, SDL_Rect* border)
 		last_seq = "";
 		displayBorder = false;
 }; 
+
+Sprite::~Sprite(){
+
+}
 
 
 void Sprite::setPos(int x, int y){

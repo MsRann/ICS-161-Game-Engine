@@ -10,7 +10,7 @@ public:
 	GameObject::GameObject(int xpos,int ypos):x(xpos), y(ypos){};
 	~GameObject(void);
 
-	void addSprite(Sprite* x);
+	void setSprite(Sprite* x);
 	void removeSprite();
 	Sprite* getSprite();
 
