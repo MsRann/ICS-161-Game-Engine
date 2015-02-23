@@ -1,8 +1,14 @@
 
 Here is a small demo showing the seamless change in backgrounds and my frame duration implementation.
 
-Latest commit:
+
 Here is a working version of the SceneManager.  It will change between "Level One" and "Level Two" by pressing the keys 1 and 2.  It remembers the Scientist
 	object's position but it currently carries over the direction the Sprite is facing when changing levels (in "Level One"" if you face left, then switch to
 	"Level Two" and face right, if you switch back to "Level One" it will now be facing right).  I do not think this will be hard to fix, but I have other
 	things to work on at the moment.
+	
+Latest commit:
+Eric just pointed out an important bug I had in the Background class. I had #include "res_path.h" in both the RunGame.exe and the Background class. This
+	caused linker errors.  I modified the Background class so that it doesn't include res_path.h so now when constructing a Background object you have
+	to give it the full path instead of just the name of the file.
+		Special Thanks to Eric for the catch.
