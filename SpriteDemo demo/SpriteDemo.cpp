@@ -5,6 +5,7 @@
 #include <sstream>
 #include <Windows.h>
 #include <SDL.h>
+#include <vector>
 #include "res_path.h"
 #include "SDL_image.h"
 #include "Sprite.h"
@@ -88,9 +89,9 @@ int main(int argc, char **argv){
 		return 1;
 	}
 
-	Sprite* spriteBG = new Sprite(SCREEN_WIDTH, SCREEN_HEIGHT, renderer);
-	spriteBG->setPos(0,0);
-	int bgFrame = spriteBG->makeFrame(background, 0, 0);
+	Sprite* spriteBG = new Sprite(0,0,SCREEN_WIDTH, SCREEN_HEIGHT, renderer);
+	int bgFrame = spriteBG->addFrameToSequence("default", spriteBG->makeFrame(background, 0, 0));
+	spriteBG->setSequence("default");
 
 	SDL_Texture *spritesheet = loadTexture(resPath + "LoZRight.png", renderer);
 	// spritesheet is from "player.png" at www.briancollins1.com
@@ -137,9 +138,10 @@ int main(int argc, char **argv){
 	//uncomment this code to see what will happen if an invalid border is set (border smaller than width and height of sprite
 	//SDL_Rect tempRect =  {5,20,22,23};
 	//Sprite* sprite1 = new Sprite(23, 26, renderer, &tempRect);
-	
+	int x = SCREEN_WIDTH / 2 ;
+	int y = SCREEN_HEIGHT / 2;
 
-	Sprite* sprite1 = new Sprite(23, 26, renderer);
+	Sprite* sprite1 = new Sprite(x,y,23, 26, renderer);
 	for (int i = 0; i < 6; i ++){
 		sprite1->addFrameToSequence("walk right", sprite1->makeFrame(spritesheet, 30*i, 0));
 	}
@@ -158,43 +160,42 @@ int main(int argc, char **argv){
 	for (int i = 0; i < 6; i ++){
 		sprite1->addFrameToSequence("float down", sprite1->makeFrame(spritesheet3, 30*i, 0));
 	}
+	std::vector<GameObject*> gameObjects;
+	gameObjects.push_back(spriteBG);
+	gameObjects.push_back(sprite1);
+	
 
-	int x = SCREEN_WIDTH / 2 ;
-	int y = SCREEN_HEIGHT / 2;
-	sprite1->setPos(x, y);
-	GameObject* test = new GameObject(50,50);
-	test->setSprite(sprite1);
 	SDL_Event e;
 	bool quit = false;
-	std::string spriteDirection = "float up";
+	sprite1->setSequence("float up");
+	sprite1->update();
+
 	while (!quit){
 		while (SDL_PollEvent(&e)){
 			if (e.type == SDL_QUIT){
 				quit = true;
 			}
 			if (e.type == SDL_KEYDOWN){
-				
-				
-				
+			
 				if (e.key.keysym.sym == SDLK_RIGHT)
 				{
 					sprite1->movex(1);
-					spriteDirection = "walk right";
+					sprite1->setSequence("walk right");
 				}
 				else if (e.key.keysym.sym == SDLK_LEFT)
 				{
 					sprite1->movex(-1);
-					spriteDirection = "walk left";
+					sprite1->setSequence("walk left");
 				}
 				else if (e.key.keysym.sym == SDLK_UP)
 				{
 					sprite1->movey(-1);
-					spriteDirection = "float up";
+					sprite1->setSequence("float up");
 				}
 				else if (e.key.keysym.sym == SDLK_DOWN)
 				{
 					sprite1->movey(1);
-					spriteDirection = "float down";
+					sprite1->setSequence("float down");
 				}else if (e.key.keysym.sym == SDLK_b){
 					if (sprite1->getBorder()== nullptr){
 						printf("Set border\n");
@@ -214,23 +215,30 @@ int main(int argc, char **argv){
 		}
 		//Render the scene
 		SDL_RenderClear(renderer);
-		//spriteBG->show(bgFrame);
-		test->render();
-		//sprite1->show(spriteDirection.c_str());
+		for(int i=0; i < gameObjects.size(); i++){
+			gameObjects[i]->update();
+		}
+
+		for(int i=0; i < gameObjects.size(); i++){
+			gameObjects[i]->render();
+		}
+
 		SDL_RenderPresent(renderer);
+	}
+
+	for(int i=0; i < gameObjects.size(); i++){
+		delete gameObjects[i];
 	}
 
 	SDL_DestroyTexture(spritesheet4);		
 	SDL_DestroyTexture(spritesheet3);
 	SDL_DestroyTexture(spritesheet2);
 	SDL_DestroyTexture(spritesheet);
-	SDL_DestroyTexture(background);
+	SDL_DestroyTexture(background);	
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	IMG_Quit();
-	SDL_Quit();
-
 	SDL_Quit();
 
 	return 0;

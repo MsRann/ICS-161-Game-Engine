@@ -1,3 +1,4 @@
+
 #include "Sprite.h"
 #include <string>
 
@@ -56,117 +57,27 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 	renderTexture(tex, ren, dst, clip);
 }
 
+
+Sprite::Sprite(int x, int y, int width, int height, SDL_Renderer* ren) : GameObject(x,y,width,height,ren){
+	currSequence = "default";
+	
+	sequenceIndex = 0;
+	last_seq = "";
+};
+
 //throws an error when border is too small and set border to a nullptr
 //sets the sprite position to the border position so it is not automatically out of the border
-Sprite::Sprite(int width, int height, SDL_Renderer* ren, SDL_Rect* border) 
-	: width(width), height(height), renderer(ren),border(border){
-		this->border = border;
-		if (this->border->h < height || this->border->w < width){
-			this->border = nullptr;
-			SDL_Log("Border not valid size. Border now set to null\n");
-		}else{
-			//place sprite in the same x and y in border
-			currX = border->x;
-			currY = border->y;
-		}
-		sequenceIndex = 0;
-		last_seq = "";
-		displayBorder = false;
+Sprite::Sprite(int x, int y, int width, int height,  SDL_Rect* border,SDL_Renderer* ren) 
+	: GameObject(x,y,width,height,border,ren){
+	currSequence = "default";
+	sequenceIndex = 0;
+	last_seq = "";
+
 }; 
 
 Sprite::~Sprite(){
-
 }
 
-
-void Sprite::setPos(int x, int y){
-	//within the border
-	if (border == nullptr ||  (x >= border->x && x <= border->x + border->w - width &&
-			y >= border->y && y <= border->y + border->h - height)){
-		currX = x;
-		currY = y;
-	}else {
-		SDL_Log("Cannot set position of the sprite there, it would be outside of the border. Ignoring setPos.\n");
-	}
-}
-
-//Takes into account the width of the sprite and doesn't let the entire sprite out of the border
-void Sprite::movex(int delta){
-	currX += delta;
-	if (border != nullptr){
-		//dont let it get too far left
-		if (currX < border->x){
-			currX -= delta;
-
-		//or too far right
-		}else if (currX > (border->x + border->w - width)){
-			currX -= delta;
-		}
-	}
-}
-
-//Takes into account the height of the sprite and doesn't let the entire sprite out of the border
-void Sprite::movey(int delta){
-	currY += delta;
-
-	//check if a border is set
-	if (border != nullptr){
-		//dont let it get too far up
-		if (currY < border->y){
-			currY -= delta;
-
-		//dont let it get too far down
-		}else if (currY > (border->y + border->h - height)){
-			currY -= delta;
-		}
-		
-	}
-	
-}
-
-int Sprite::getX(){
-	return currX;
-}
-
-int Sprite::getY(){
-	return currY;
-}
-
-int Sprite::getWidth(){
-	return width;
-}
-
-int Sprite::getHeight(){
-	return height;
-}
-
-void Sprite::setBorder(SDL_Rect* newBorder){
-	if (currX >= newBorder->x && currX <= newBorder->x + newBorder->w - width &&
-			currY >= newBorder->y && currY <= newBorder->y + newBorder->h - height){
-		border = newBorder;
-	}else{
-		SDL_Log("Invalid border! Border not encompassing sprite, border was not set\n");
-	}
-}
-
-SDL_Rect* Sprite::getBorder(){
-	return border;
-}
-
-//returns previous border
-SDL_Rect* Sprite::removeBorder(){
-	SDL_Rect* temp = border;
-	border = nullptr;
-	return temp;
-}
-
-void Sprite::showBorder(bool option){
-	displayBorder = option;
-}
-
-bool Sprite::getIfShowingBorder(){
-	return displayBorder;
-}
 
 // makeFrame returns the unique index of the frame
 int Sprite::makeFrame(SDL_Texture* texture, int x, int y){
@@ -181,31 +92,58 @@ int Sprite::addFrameToSequence(std::string seqName, int frameIndex){
 	return sequenceList[seqName].size()-1;
 }
 
-// show(int) renders the frame with the specified frameIndex
-void Sprite::show(int frameIndex){
-	SDL_Rect showFrame = {frames[frameIndex].x,frames[frameIndex].y,width,height};
-	renderTexture(frames[frameIndex].texture,renderer,currX,currY,&showFrame);
-	if (displayBorder && border != nullptr){
-		SDL_RenderDrawRect(renderer, border);
+std::string Sprite::getSequence(){
+	return currSequence;
+}
+
+void Sprite::setSequence(std::string newSequence){
+	//currSequence = newSequence;
+	updateToDo newUpdate = {"changeSequence",newSequence};
+	updates.push_back(newUpdate);
+}
+
+
+// show(string) cycles through all frames in the specified sequence, one per call
+
+void Sprite::show(){
+	//if it can't find the specified sequence
+	if ( sequenceList.find(currSequence) == sequenceList.end()){
+		SDL_Log("Couldn't find specified sequence name");
+	}else{
+
+		//reset sequence index if not the same frame sequence as previous
+		if (last_seq != currSequence){
+			last_seq = currSequence;
+			sequenceIndex = 0;
+		}
+		SDL_Rect showFrame = {frames[sequenceList[currSequence].at(sequenceIndex)].x,frames[sequenceList[currSequence].at(sequenceIndex)].y,getWidth(),getHeight()};
+		renderTexture(frames[sequenceList[currSequence].at(sequenceIndex)].texture,getRenderer(),getX(),getY(),&showFrame);
+	
+		if (getIfShowingBorder() && getBorder() != nullptr){
+			SDL_RenderDrawRect(getRenderer(), getBorder());
+		}
+		sequenceIndex++;
+		if (sequenceList[currSequence].size() == sequenceIndex){
+			sequenceIndex = 0;
+		}
 	}
 }
 
-// show(string) cycles through all frames in the specified sequence, one per call
-void Sprite::show(std::string sequence){
-	//reset sequence index if not the same frame sequence as previous
-	if (last_seq != sequence){
-		last_seq = sequence;
-		sequenceIndex = 0;
+void Sprite::render() {
+	show();
+}
+
+void Sprite::update(){
+	for (int i = 0; i < updates.size(); i ++){
+		if (updates[i].type == "y"){
+			setY(std::stoi(updates[i].change));
+		}else if (updates[i].type == "x"){
+			setX(std::stoi(updates[i].change));
+		}else if (updates[i].type == "changeSequence"){
+			currSequence = updates[i].change;
+		}
 	}
-	SDL_Rect showFrame = {frames[sequenceList[sequence].at(sequenceIndex)].x,frames[sequenceList[sequence].at(sequenceIndex)].y,width,height};
-	renderTexture(frames[sequenceList[sequence].at(sequenceIndex)].texture,renderer,currX,currY,&showFrame);
-	if (displayBorder && border != nullptr){
-		SDL_RenderDrawRect(renderer, border);
-	}
-	sequenceIndex++;
-	if (sequenceList[sequence].size() == sequenceIndex){
-		sequenceIndex = 0;
-	}
+	updates.clear();
 }
 
 void Sprite::addSound(std::string soundName, std::string fileName)

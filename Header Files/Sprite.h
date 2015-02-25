@@ -1,43 +1,24 @@
 #pragma once
 
 #include "SDL.h"
+#include "GameObject.h"
 #include <SDL_mixer.h>
 #include <vector>
 #include <map>
 
-class Sprite
+
+class Sprite : public GameObject
 {
 public:
 	//By default borders are set to null
-	Sprite(int width, int height, SDL_Renderer* ren) : width(width), height(height), renderer(ren){displayBorder = false;sequenceIndex = 0;last_seq = "";border=nullptr;};
-	~Sprite(void);
+	Sprite(int x, int y, int width, int height, SDL_Renderer* ren);
 
 	//new constructor that specifies a rectangle border that the sprite cannot get through
 	//if the border is invalid it notifies the programmer that it didn't set one
 	//if it is valid, the current x and y are set to be within the border and at the top left
-	Sprite(int width, int height, SDL_Renderer* ren, SDL_Rect* border);
-
-	//new helper methods that allow dynamic changes to the sprite border in game
-	void setBorder(SDL_Rect* newBorder);
-	SDL_Rect* getBorder();
-	//returns the rectangle of the previous border if there was one, nullptr otherwise
-	SDL_Rect* removeBorder();
-	//display the rectangle on screen for debugging
-	//if option is true then it displays it, toggles it off if not.
-	void showBorder(bool option);
-	//returns the state of whether the border is being displayed or not
-	bool getIfShowingBorder();
-
-	//not allowed to be set beyond border if there is one
-	void setPos(int x, int y);
-	//doesn't allow movement past border in x if there is one
-	void movex(int delta);
-	//doesn't allow movement past border in y if there is one
-	void movey(int delta);
-	int getX();
-	int getY();
-	int getWidth();
-	int getHeight();
+	Sprite(int x, int y, int width, int height, SDL_Rect* border, SDL_Renderer* ren);
+	
+	~Sprite(void);
 
 	// makeFrame returns the unique index of the frame
 	int makeFrame(SDL_Texture* texture, int x, int y);
@@ -47,11 +28,21 @@ public:
 
 	// show(int) renders the frame with the specified frameIndex
 	// also shows the border if it is toggled on and border is not null
-	void show(int frameIndex);
+	//void show(int frameIndex);
 
 	// show(string) cycles through all frames in the specified sequence, one per call
 	// also shows the border if it is toggled on and border is not null
-	void show(std::string sequence);
+	//void show(std::string sequence);
+
+	void show();
+
+	std::string getSequence();
+	void setSequence(std::string newSequenceName);
+
+    void render() override;
+
+	void update() override;
+
 
 	/*
 	* Adds a sound to a map that can be referenced by string names
@@ -69,12 +60,12 @@ public:
 // The private part of the class is given as a hint or suggestion.
 // In homework 3 you can make any modifications you want to the class's innards.
 private:
-	int width, height;
-	int currX, currY;		// the coordinates of the sprite's upper left hand corner relative to the window
-	SDL_Renderer* renderer;
-	SDL_Rect* border;
-	bool displayBorder;
+//	int width, height;
+//	int currX, currY;		// the coordinates of the sprite's upper left hand corner relative to the window
+//	SDL_Renderer* renderer;
 
+	std::string currSequence;
+	std::string last_seq;
 
 	struct frame
 	{
@@ -84,8 +75,9 @@ private:
 	};
 	std::vector<frame> frames;
 	//string to hold name of last sequence called
-	std::string last_seq;
+
 	std::map<std::string, std::vector<int>> sequenceList;
+	 
 	int sequenceIndex;		// shared by all sequences; it would be better to have
 							// one for each sequence
 
@@ -94,4 +86,3 @@ private:
 	*/
 	std::map<std::string, Mix_Chunk *> soundList;
 };
-
