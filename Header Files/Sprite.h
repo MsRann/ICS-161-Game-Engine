@@ -43,20 +43,6 @@ public:
 
 	void update() override;
 
-
-	/*
-	* Adds a sound to a map that can be referenced by string names
-	* @param soundName - The name associated with the sound
-	* @param fileName - The name of the sound file
-	*/
-	void addSound(std::string soundName, std::string fileName);
-
-	/*
-	* Plays a sound that can be referenced by string names
-	* @param soundName - The name associated with the sound
-	*/
-	void playSound(std::string soundName);
-
 // The private part of the class is given as a hint or suggestion.
 // In homework 3 you can make any modifications you want to the class's innards.
 private:
@@ -80,9 +66,4 @@ private:
 	 
 	int sequenceIndex;		// shared by all sequences; it would be better to have
 							// one for each sequence
-
-	/*
-	* Map to hold a list of sounds associated with the sprite
-	*/
-	std::map<std::string, Mix_Chunk *> soundList;
 };

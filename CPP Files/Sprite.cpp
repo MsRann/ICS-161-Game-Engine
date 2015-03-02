@@ -145,32 +145,3 @@ void Sprite::update(){
 	}
 	updates.clear();
 }
-
-void Sprite::addSound(std::string soundName, std::string fileName)
-{
-	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-	{
-	printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-	}
-
-	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
-	{
-	printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n", Mix_GetError());
-	}
-
-	Mix_Chunk *sound;
-
-	sound = Mix_LoadWAV(fileName.c_str());
-
-	if (sound == NULL)
-	{
-	printf("Failed to load sound effect! SDL_mixer Error: %s\n", Mix_GetError());
-	}
-
-	soundList[soundName] = sound;
-}
-
-void Sprite::playSound(std::string soundName)
-{
-	Mix_PlayChannel(-1, soundList[soundName], 0);
-}
