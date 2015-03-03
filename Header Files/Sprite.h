@@ -6,6 +6,10 @@
 #include <vector>
 #include <map>
 
+//Jake's includes
+#include <chrono> //include chorno? OH NOOO!
+
+
 
 class Sprite : public GameObject
 {
@@ -21,19 +25,13 @@ public:
 	~Sprite(void);
 
 	// makeFrame returns the unique index of the frame
-	int makeFrame(SDL_Texture* texture, int x, int y);
+	// Added the frameDuration parameter - Jake
+	int makeFrame(SDL_Texture* texture, int x, int y,double frameTimeLength);
 
 	// addFrameToSequence returns the number of frames in the sequence after the add
 	int addFrameToSequence(std::string seqName, int frameIndex);
 
-	// show(int) renders the frame with the specified frameIndex
-	// also shows the border if it is toggled on and border is not null
-	//void show(int frameIndex);
-
-	// show(string) cycles through all frames in the specified sequence, one per call
-	// also shows the border if it is toggled on and border is not null
-	//void show(std::string sequence);
-
+	//used in render
 	void show();
 
 	std::string getSequence();
@@ -58,6 +56,7 @@ private:
 		SDL_Texture* texture;
 		int x;
 		int y;
+		double timeLength; // - Jake
 	};
 	std::vector<frame> frames;
 	//string to hold name of last sequence called
@@ -66,4 +65,10 @@ private:
 	 
 	int sequenceIndex;		// shared by all sequences; it would be better to have
 							// one for each sequence
+	// Variables for frame duration implementation - Jake
+	std::chrono::high_resolution_clock::time_point timePrev; //To record the time since last update
+	std::string prevSequence; //To reset the clock in changed sequences
+	double GetTimeDifference(); //To calculate time difference since last frame update.
+
+
 };

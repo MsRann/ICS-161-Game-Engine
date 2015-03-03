@@ -78,10 +78,26 @@ Sprite::Sprite(int x, int y, int width, int height,  SDL_Rect* border,SDL_Render
 Sprite::~Sprite(){
 }
 
+double Sprite::GetTimeDifference(){
+	// Get current time as a std::chrono::time_point
+	// which basically contains info about the current point in time
+	auto timeCurrent = std::chrono::high_resolution_clock::now();
 
+	// Compare the two to create time_point containing delta time in nanosecnds
+	auto timeDiff = std::chrono::duration_cast<std::chrono::nanoseconds>(timeCurrent - timePrev);
+
+	// Get the tics as a variable
+	double delta = timeDiff.count();
+
+	// Turn nanoseconds into seconds
+	delta /= 1000000000;
+
+	//timePrev = timeCurrent;
+	return delta;
+}
 // makeFrame returns the unique index of the frame
-int Sprite::makeFrame(SDL_Texture* texture, int x, int y){
-	frame newFrame = {texture,x,y};
+int Sprite::makeFrame(SDL_Texture* texture, int x, int y,double frameTimeLength){
+	frame newFrame = {texture,x,y,frameTimeLength};
 	frames.push_back(newFrame);
 	return frames.size()-1;
 }
@@ -116,15 +132,41 @@ void Sprite::show(){
 			last_seq = currSequence;
 			sequenceIndex = 0;
 		}
+
+
+
+		if (currSequence != prevSequence){
+			timePrev = std::chrono::high_resolution_clock::now();
+		}
+		prevSequence = currSequence;
+	
+		if (frames[sequenceList.at(currSequence)[sequenceIndex]].timeLength != 0.0){
+
+			double diff = GetTimeDifference();
+			//std::cout << diff << std::endl;
+
+			//If the timeLength == 0.0 then it is never supposed to change
+			//If the timer for the frame has been reached, advance to the next frame in the sequence
+			//	If reached just passed the end of the sequence, set the sequence index back to 0
+			if (diff >= frames[sequenceList.at(currSequence)[sequenceIndex]].timeLength){
+			
+				sequenceIndex++;
+				if (sequenceIndex >= sequenceList.at(currSequence).size()){
+					sequenceIndex = 0;
+				}
+				timePrev = std::chrono::high_resolution_clock::now();
+			}
+			if (sequenceIndex >= sequenceList.at(currSequence).size()){
+				sequenceIndex = 0;
+			}
+		}
+
 		SDL_Rect showFrame = {frames[sequenceList[currSequence].at(sequenceIndex)].x,frames[sequenceList[currSequence].at(sequenceIndex)].y,getWidth(),getHeight()};
 		renderTexture(frames[sequenceList[currSequence].at(sequenceIndex)].texture,getRenderer(),getX(),getY(),&showFrame);
 	
+
 		if (getIfShowingBorder() && getBorder() != nullptr){
 			SDL_RenderDrawRect(getRenderer(), getBorder());
-		}
-		sequenceIndex++;
-		if (sequenceList[currSequence].size() == sequenceIndex){
-			sequenceIndex = 0;
 		}
 	}
 }

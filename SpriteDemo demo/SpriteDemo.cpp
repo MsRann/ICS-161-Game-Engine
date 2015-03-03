@@ -90,7 +90,7 @@ int main(int argc, char **argv){
 	}
 
 	Sprite* spriteBG = new Sprite(0,0,SCREEN_WIDTH, SCREEN_HEIGHT, renderer);
-	int bgFrame = spriteBG->addFrameToSequence("default", spriteBG->makeFrame(background, 0, 0));
+	int bgFrame = spriteBG->addFrameToSequence("default", spriteBG->makeFrame(background, 0, 0,0.0));
 	spriteBG->setSequence("default");
 
 	SDL_Texture *spritesheet = loadTexture(resPath + "LoZRight.png", renderer);
@@ -143,22 +143,22 @@ int main(int argc, char **argv){
 
 	Sprite* sprite1 = new Sprite(x,y,23, 26, renderer);
 	for (int i = 0; i < 6; i ++){
-		sprite1->addFrameToSequence("walk right", sprite1->makeFrame(spritesheet, 30*i, 0));
+		sprite1->addFrameToSequence("walk right", sprite1->makeFrame(spritesheet, 30*i, 0,0.3));
 	}
 
-	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 0, 0));
-	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 24, 0));
-	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 49, 0));
-	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 72, 0));
-	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 98, 0));
-	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 145, 0));
+	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 0, 0,0.3));
+	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 24, 0,0.3));
+	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 49, 0,0.3));
+	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 72, 0,0.3));
+	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 98, 0,0.3));
+	sprite1->addFrameToSequence("walk left", sprite1->makeFrame(spritesheet4, 145, 0,0.3));
 
 	for (int i = 0; i < 6; i ++){
-		sprite1->addFrameToSequence("float up", sprite1->makeFrame(spritesheet2, 30*i, 0));
+		sprite1->addFrameToSequence("float up", sprite1->makeFrame(spritesheet2, 30*i, 0,0.3));
 	}
 
 	for (int i = 0; i < 6; i ++){
-		sprite1->addFrameToSequence("float down", sprite1->makeFrame(spritesheet3, 30*i, 0));
+		sprite1->addFrameToSequence("float down", sprite1->makeFrame(spritesheet3, 30*i, 0,0.3));
 	}
 	std::vector<GameObject*> gameObjects;
 	gameObjects.push_back(spriteBG);
@@ -215,10 +215,12 @@ int main(int argc, char **argv){
 		}
 		//Render the scene
 		SDL_RenderClear(renderer);
+		//changes position of sprites, what sequence its showing, etc
 		for(int i=0; i < gameObjects.size(); i++){
 			gameObjects[i]->update();
 		}
 
+		//displays GameObject on the screen
 		for(int i=0; i < gameObjects.size(); i++){
 			gameObjects[i]->render();
 		}
