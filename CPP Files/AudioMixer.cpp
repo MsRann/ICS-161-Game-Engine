@@ -58,6 +58,50 @@ void AudioMixer::stopPlayingAllSounds()
 	Mix_HaltChannel(-1);
 }
 
+void AudioMixer::addMusic(std::string musicName, std::string fileName)
+{
+	Mix_Music *music;
+
+	music = Mix_LoadMUS(fileName.c_str());
+
+	if (music == NULL)
+	{
+		printf("Failed to load music! SDL_mixer Error: %s\n", Mix_GetError());
+	}
+
+	musicList[musicName] = music;
+}
+
+void AudioMixer::playMusic(std::string musicName)
+{
+	Mix_PlayMusic(musicList[musicName], -1);
+}
+
+void AudioMixer::pauseMusic()
+{
+	Mix_PauseMusic();
+}
+
+void AudioMixer::resumeMusic()
+{
+	Mix_ResumeMusic();
+}
+
+void AudioMixer::stopMusic()
+{
+	Mix_HaltMusic();
+}
+
+bool AudioMixer::isMusicPlaying()
+{
+	return Mix_PlayingMusic();
+}
+
+bool AudioMixer::isMusicPaused()
+{
+	return Mix_PausedMusic();
+}
+
 AudioMixer::~AudioMixer(void)
 {
 	soundList.clear();

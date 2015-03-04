@@ -7,6 +7,10 @@
 
 using namespace std;
 
+/*
+Class: AudioMixer
+A class that manages all sounds played.
+*/
 class AudioMixer
 {
 public:
@@ -59,6 +63,44 @@ public:
 	void stopPlayingAllSounds();
 
 	/*
+	* Adds a music track to a map that can be referenced by string names
+	* @param musicName - The name associated with the sound
+	* @param fileName - The name of the sound file
+	*/
+	void addMusic(std::string soundName, std::string fileName);
+
+	/*
+	* Plays the music track
+	* @param musicName - The name associated with the sound
+	*/
+	void playMusic(std::string musicName);
+
+	/*
+	* Pauses the music track
+	*/
+	void pauseMusic();
+
+	/*
+	* Resumes playing the music track
+	*/
+	void resumeMusic();
+
+	/*
+	* Stops playing the music track
+	*/
+	void stopMusic();
+
+	/*
+	* Checks to see if music is currently playing
+	*/
+	bool isMusicPlaying();
+
+	/*
+	* Checks to see if the music is currently paused
+	*/
+	bool isMusicPaused();
+
+	/*
 	* Cleans up the AudioMixer and frees memory
 	*/
 	~AudioMixer();
@@ -73,6 +115,11 @@ private:
 	* Map to hold a list of sounds associated with the sound name
 	*/
 	std::map<std::string, Mix_Chunk *> soundList;
+
+	/*
+	* Map to hold a list of sounds associated with the sound name
+	*/
+	std::map<std::string, Mix_Music *> musicList;
 
 	/*
 	* Map to hold a list of channels associated with sound name
