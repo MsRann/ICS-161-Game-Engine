@@ -3,40 +3,31 @@
 
 #include "SDL.h"
 #include <SDL_image.h>
-#include <vector>
-#include <map>
-#include "res_path.h"
-#include <iostream>
-
-using namespace std;
+#include <string>
+#include <functional>
 
 class Button
 {
 public:
+	//The image file should be an image of 3 buttons placed horizontally, with the leftmost button image being the default button image, the middle
+	//one of the mouse hovering over the button, and the last one the image of the button when it is clicked. The function parameter is called when
+	//the button is clicked.
+	Button(SDL_Renderer* ren, std::string filepath, std::function<void ()>& func);
 
-	Button();
-
-	void setButtonSize(int width, int height);
-	void setButtonPosition(int x, int y);
-	// Think about passing ints or an RGBA value, instead of passing SDL_Color (programmer shouldn't be worrying about SDL)
-	void setButtonColor(SDL_Color &color);
-	// Think about passing a string with the file name of the image, instead of passing SDL_Texture (again, programmer shouldn't be worrying about SDL)
-	void setButtonImage(SDL_Texture &texture); 
+	//Call the setDimension function after creating a button to place the button's location and size on the renderer.
+	void setDimension(int x, int y, int w, int h);
+	//Call the handleEvents method in the event handling loop passing in the event.
+	void handleEvents(SDL_Event* e);
+	//Call the drawButton method in the rendering loop
 	void drawButton();
-	bool onClick();
-	bool onHover();
 
-	~Button();
 
 private:
-
-	int width;
-	int height;
-	int x;
-	int y;
-	SDL_Color &color;
-	SDL_Texture &texture;
+	std::function<void()> f;
+	SDL_Renderer* ren;
+	SDL_Texture* texture;
+	SDL_Rect pos;
+	SDL_Rect clip;
 };
 
 #endif
-
