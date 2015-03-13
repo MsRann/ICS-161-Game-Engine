@@ -174,6 +174,10 @@ int main(int argc, char **argv){
 	//Joe.renderScientist(spriteDirection, false);
 
 	//const std::string 
+	
+
+	SDL_Rect JoeBorder = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
+	Joe.setBorder(&JoeBorder);
 
 	// DEON'S BUTTON CODE
 	int x = SCREEN_WIDTH - 50, y = SCREEN_HEIGHT - 50, w = 50, h = 50;
@@ -201,37 +205,68 @@ int main(int argc, char **argv){
 				float movex = 0;
 				float movey = 0;
 
-				if (e.key.keysym.sym == SDLK_RIGHT)
+				if (e.key.keysym.sym == SDLK_d)
 				{
 					//ChangeLevel = true;
 					Joe.setSequence("walk right");
-					movex = 1;
+					movex = 5;
 
 					if (!mixer->isSoundPlaying("footsteps"))
 						mixer->playSoundOnce("footsteps");
 				}
-				if (e.key.keysym.sym == SDLK_LEFT)
+				if (e.key.keysym.sym == SDLK_a)
 				{
 					Joe.setSequence("walk left");
-					movex = -1;
+					movex = -5;
 					if (!mixer->isSoundPlaying("footsteps"))
 						mixer->playSoundOnce("footsteps");
 				}
-				if (e.key.keysym.sym == SDLK_UP)
+				if (e.key.keysym.sym == SDLK_w)
 				{
 					Joe.setSequence("walk up");
-					movey = -1;
+					movey = -5;
 					if (!mixer->isSoundPlaying("footsteps"))
 						mixer->playSoundOnce("footsteps");
 				}
-				if (e.key.keysym.sym == SDLK_DOWN)
+				if (e.key.keysym.sym == SDLK_s)
 				{
 					Joe.setSequence("walk down");
-					movey = 1;
+					movey = 5;
 					if (!mixer->isSoundPlaying("footsteps"))
 						mixer->playSoundOnce("footsteps");
 				}
-
+				if (e.key.keysym.sym == SDLK_q)
+				{
+					Joe.setSequence("walk up");
+					movey = -5;
+					movex = -5;
+					if (!mixer->isSoundPlaying("footsteps"))
+						mixer->playSoundOnce("footsteps");
+				}
+				if (e.key.keysym.sym == SDLK_e)
+				{
+					Joe.setSequence("walk down");
+					movey = -5;
+					movex = 5;
+					if (!mixer->isSoundPlaying("footsteps"))
+						mixer->playSoundOnce("footsteps");
+				}
+				if (e.key.keysym.sym == SDLK_z)
+				{
+					Joe.setSequence("walk down");
+					movey = 5;
+					movex = -5;
+					if (!mixer->isSoundPlaying("footsteps"))
+						mixer->playSoundOnce("footsteps");
+				}
+				if (e.key.keysym.sym == SDLK_x)
+				{
+					Joe.setSequence("walk down");
+					movey = 5;
+					movex = 5;
+					if (!mixer->isSoundPlaying("footsteps"))
+						mixer->playSoundOnce("footsteps");
+				}
 				if (e.key.keysym.sym == SDLK_p)
 				{
 					//If there is no music playing
@@ -259,27 +294,6 @@ int main(int argc, char **argv){
 						}
 					}
 				}
-
-				if (e.key.keysym.sym == SDLK_1){
-					ChangeLevel = false;
-					mixer->playMusic("intro");
-				}
-				else if (e.key.keysym.sym == SDLK_2){
-					ChangeLevel = true;
-					mixer->playMusic("haunted");
-				}
-
-				//Joe.move_normalized(movex, movey, 1.0f);
-
-				//std::cout << "x = " << movex << "y = " << movey << std::endl;
-				//Joe.movex(movex);
-				//Joe.movey(movey);
-
-				float length = sqrt(movex*movex + movey*movey);
-				movex /= length;
-				movey /= length;
-				Joe.movex(movex);
-				Joe.movey(movey);
 
 				if (movex != 0 || movey != 0){
 					Joe.move_normalized(movex, movey, 1.0f);
