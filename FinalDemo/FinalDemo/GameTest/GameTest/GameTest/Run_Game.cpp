@@ -222,25 +222,9 @@ int main(int argc, char **argv){
 						mixer->playSoundOnce("footsteps");
 				}
 
-				if (e.key.keysym.sym == SDLK_1){
-					ChangeLevel = false;
-				}
-				else if (e.key.keysym.sym == SDLK_2){
-					ChangeLevel = true;
-				}
-
-				//Joe.move_normalized(movex, movey, 1.0f);
-
-				//std::cout << "x = " << movex << "y = " << movey << std::endl;
-				//Joe.movex(movex);
-				//Joe.movey(movey);
-
-				float length = sqrt(movex*movex + movey*movey);
-				std::cout << "x = " << length << "y = " << movey << std::endl;
-				movex /= length;
-				movey /= length;
-				Joe.movex(movex);
-				Joe.movey(movey);
+				if (movex != 0 || movey != 0){
+					Joe.move_normalized(movex, movey, 1.0f);
+				}	
 			}
 			// DEON'S BUTTON CODE
 			b.handleEvents(&e);
