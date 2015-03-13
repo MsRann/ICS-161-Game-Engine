@@ -179,6 +179,7 @@ int main(int argc, char **argv){
 	SDL_Rect JoeBorder = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 	Joe.setBorder(&JoeBorder);
 
+	
 	// DEON'S BUTTON CODE
 	int x = SCREEN_WIDTH - 50, y = SCREEN_HEIGHT - 50, w = 50, h = 50;
 	std::function<void()> f = [&]() 
@@ -296,7 +297,7 @@ int main(int argc, char **argv){
 				}
 
 				if (movex != 0 || movey != 0){
-					Joe.move_normalized(movex, movey, 1.0f);
+					Joe.move_normalized(movex, movey, 5.0f);
 				}	
 			}
 			// DEON'S BUTTON CODE
@@ -321,6 +322,15 @@ int main(int argc, char **argv){
 		// DEON'S BUTTON CODE
 		b.setDimension(x, y, w, h);
 		b.drawButton();
+
+		float percentHP =  (float)Joe.hp / (float)100;
+		percentHP *= 30.0f;
+		if (percentHP < 0){
+			percentHP = 0;
+		}
+		SDL_Rect fillRect = { Joe.getX() - 10,Joe.getY()- 5,(int)percentHP,5};
+		SDL_SetRenderDrawColor(renderer, 0x00, 0xFF, 0x00, 0xFF);
+		SDL_RenderFillRect(renderer, &fillRect);
 		SDL_RenderPresent(renderer);	
 	}
 

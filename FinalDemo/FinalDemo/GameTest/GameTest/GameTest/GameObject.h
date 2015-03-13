@@ -64,6 +64,7 @@ public:
 	string name;
 
 	std::vector<updateToDo> updates;
+	int hp = 100;
 private:
 	float x, y, width, height;
 	bool collidable;
