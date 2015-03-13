@@ -184,6 +184,7 @@ int main(int argc, char **argv){
 	SDL_Rect JoeBorder = { 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT };
 	Joe.setBorder(&JoeBorder);
 
+	
 	// DEON'S BUTTON CODE
 	int x = SCREEN_WIDTH - 50, y = SCREEN_HEIGHT - 50, w = 50, h = 50;
 	std::function<void()> f = [&]() 
@@ -307,7 +308,7 @@ int main(int argc, char **argv){
 				}
 
 				if (movex != 0 || movey != 0){
-					Joe.move_normalized(movex, movey, 1.0f);
+					Joe.move_normalized(movex, movey, 5.0f);
 				}	
 			}
 			// DEON'S BUTTON CODE

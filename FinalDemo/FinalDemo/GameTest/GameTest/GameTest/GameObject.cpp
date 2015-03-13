@@ -146,7 +146,6 @@ void GameObject::move_normalized(float x, float y, float speed){
 	if (x != 0 && y != 0){
 
 		float len = speed / sqrt(x*x + y*y);
-		len = 1 - len;
 		std::cout << len << std::endl;
 		x *= len;
 		y *= len;
