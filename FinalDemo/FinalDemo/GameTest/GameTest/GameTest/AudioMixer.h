@@ -63,6 +63,12 @@ public:
 	void stopPlayingAllSounds();
 
 	/*
+	* Checks to see if a sound is playing on a given channel
+	* @param soundName - The name associated with the sound
+	*/
+	bool isSoundPlaying(string soundName);
+
+	/*
 	* Adds a music track to a map that can be referenced by string names
 	* @param musicName - The name associated with the sound
 	* @param fileName - The name of the sound file

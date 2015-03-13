@@ -58,6 +58,13 @@ void AudioMixer::stopPlayingAllSounds()
 	Mix_HaltChannel(-1);
 }
 
+bool AudioMixer::isSoundPlaying(string soundName)
+{
+	bool result = Mix_Playing(channelsList[soundName]);
+
+	return result;
+}
+
 void AudioMixer::addMusic(std::string musicName, std::string fileName)
 {
 	Mix_Music *music;

@@ -153,25 +153,30 @@ int main(int argc, char **argv){
 					//ChangeLevel = true;
 					Joe.setSequence("walk right");
 					Joe.movex(1);
-					mixer->playSoundOnce("footsteps");
+
+					if (!mixer->isSoundPlaying("footsteps"))
+						mixer->playSoundOnce("footsteps");
 				}
 				else if (e.key.keysym.sym == SDLK_LEFT)
 				{
 					Joe.setSequence("walk left");
 					Joe.movex(-1);
-					mixer->playSoundOnce("footsteps");
+					if (!mixer->isSoundPlaying("footsteps"))
+						mixer->playSoundOnce("footsteps");
 				}
 				else if (e.key.keysym.sym == SDLK_UP)
 				{
 					Joe.setSequence("walk up");
 					Joe.movey(-1);
-					mixer->playSoundOnce("footsteps");
+					if (!mixer->isSoundPlaying("footsteps"))
+						mixer->playSoundOnce("footsteps");
 				}
 				else if (e.key.keysym.sym == SDLK_DOWN)
 				{
 					Joe.setSequence("walk down");
 					Joe.movey(1);
-					mixer->playSoundOnce("footsteps");
+					if (!mixer->isSoundPlaying("footsteps"))
+						mixer->playSoundOnce("footsteps");
 				}
 				else if (e.key.keysym.sym == SDLK_1){
 					ChangeLevel = false;
