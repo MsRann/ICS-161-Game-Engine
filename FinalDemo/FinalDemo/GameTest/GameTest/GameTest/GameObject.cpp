@@ -31,7 +31,7 @@ GameObject::GameObject(string name, float xpos, float ypos, float width, float h
 }
 
 GameObject::~GameObject(){
-	delete border;
+	//delete border;
 }
 
 SDL_Renderer* GameObject::getRenderer(){
@@ -143,9 +143,11 @@ void GameObject::movey(float delta){
 }
 
 void GameObject::move_normalized(float x, float y, float speed){
-	float len = speed/sqrt(x*x + y*y);
-	x *= len;
-	y *= len;
+	if (x != 0 && y != 0){
+		float len = speed / sqrt(x*x + y*y);
+		x *= len;
+		y *= len;
+	}
 	movex(x);
 	movey(y);
 }
