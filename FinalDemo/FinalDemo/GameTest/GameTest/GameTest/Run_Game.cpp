@@ -9,7 +9,8 @@
 #include "SDL.h"
 //#include "cleanup.h"
 #include "res_path.h"
-#include "AI.h"
+#include "AudioMixer.h"
+
 
 #include <string>
 #include <iostream>
@@ -51,7 +52,6 @@ int main(int argc, char **argv){
 	
 	std::string spritesheetLocation = resPath + "Trainers.png";//"C:\\Users\\Jake\\Desktop\\SDL\\MyProjects\\res\\GameTest\\Trainers.png";
 
-	
 	SDL_Surface* spritesheetTestSurface = IMG_Load(spritesheetLocation.c_str());
 	SDL_SetColorKey(spritesheetTestSurface, 1, SDL_MapRGB(spritesheetTestSurface->format, 255, 255, 255));
 	SDL_Texture *spritesheetTest = SDL_CreateTextureFromSurface(renderer, spritesheetTestSurface);
@@ -83,17 +83,15 @@ int main(int argc, char **argv){
 	//Scientist Bob4 = Scientist(spritesheetTest, renderer, 300, 250, true);
 	//Scientist Bob5 = Scientist(spritesheetTest, renderer, 300, 50, true);
 	Sprite Joe = Sprite("Joe",100, 100, 14, 20, renderer);
-	Sprite Jim = Sprite("Jim",300, 300, 14, 20, renderer);
-	Sprite Robert = Sprite("Robert",400, 400, 14, 20, renderer);
 	Sprite Bob = Sprite("Bob",200, 200, 14, 20, renderer);
 	sceneManager.addGameObjectToScene("Level One", &Joe);
-	sceneManager.addGameObjectToScene("Level One", &Jim);
-	sceneManager.addGameObjectToScene("Level One", &Robert);
 	sceneManager.addGameObjectToScene("Level Two", &Bob);
 
 	//Sprite* Joe = new Sprite(x, y, 23, 26, renderer);
 
 	for (int i = 0; i < 3; i++){
+
+
 		Bob.addFrameToSequence("walk down", Bob.makeFrame(spritesheetTest, 18, 389 + (i * 30), 0.3));
 		Bob.addFrameToSequence("walk up", Bob.makeFrame(spritesheetTest, 78, 389 + (i * 30), 0.3));
 		Bob.addFrameToSequence("walk right", Bob.makeFrame(spritesheetTest, 109, 389 + (i * 30), 0.3));
@@ -103,27 +101,12 @@ int main(int argc, char **argv){
 		Joe.addFrameToSequence("walk up", Joe.makeFrame(spritesheetTest, 78, 389 + (i * 30), 0.3));
 		Joe.addFrameToSequence("walk right", Joe.makeFrame(spritesheetTest, 109, 389 + (i * 30), 0.3));
 		Joe.addFrameToSequence("walk left", Joe.makeFrame(spritesheetTest, 49, 389 + (i * 30), 0.3));
-
-		
-		Jim.addFrameToSequence("walk down", Jim.makeFrame(spritesheetTest, 18, 389 + (i * 30), 0.3));
-		Jim.addFrameToSequence("walk up", Jim.makeFrame(spritesheetTest, 78, 389 + (i * 30), 0.3));
-		Jim.addFrameToSequence("walk right", Jim.makeFrame(spritesheetTest, 109, 389 + (i * 30), 0.3));
-		Jim.addFrameToSequence("walk left", Jim.makeFrame(spritesheetTest, 49, 389 + (i * 30), 0.3));
-
-		
-		Robert.addFrameToSequence("walk down", Robert.makeFrame(spritesheetTest, 18, 389 + (i * 30), 0.3));
-		Robert.addFrameToSequence("walk up", Robert.makeFrame(spritesheetTest, 78, 389 + (i * 30), 0.3));
-		Robert.addFrameToSequence("walk right", Robert.makeFrame(spritesheetTest, 109, 389 + (i * 30), 0.3));
-		Robert.addFrameToSequence("walk left", Robert.makeFrame(spritesheetTest, 49, 389 + (i * 30), 0.3));
-
 	}
 	Bob.setSequence("walk up");
 	Bob.update();
 	Joe.setSequence("walk down");
 	Joe.update();
-	AI ai = AI(Robert, Joe);
-	AI ai1 = AI(Jim, Joe);
-	AI ai2 = AI(Bob, Joe);
+
 	//sceneManager.addGameObjectToScene("Level Two", &Frank);
 	//sceneManager.addGameObjectToScene("Level One", &Bob);
 	//sceneManager.addGameObjectToScene("Level One", &Bob1);
@@ -143,6 +126,9 @@ int main(int argc, char **argv){
 	//Scientist Frank = Scientist(spritesheetTest, renderer, 100, 100);
 	//Scientist Bob = Scientist(spritesheetTest, renderer, 300, 300);
 
+	// ADDING AUDIO SOUNDS
+	AudioMixer *mixer = new AudioMixer();
+	mixer->addSound("footsteps", "footsteps.wav");
 
 	SDL_RenderPresent(renderer);
 
@@ -167,21 +153,25 @@ int main(int argc, char **argv){
 					//ChangeLevel = true;
 					Joe.setSequence("walk right");
 					Joe.movex(1);
+					mixer->playSoundOnce("footsteps");
 				}
 				else if (e.key.keysym.sym == SDLK_LEFT)
 				{
 					Joe.setSequence("walk left");
 					Joe.movex(-1);
+					mixer->playSoundOnce("footsteps");
 				}
 				else if (e.key.keysym.sym == SDLK_UP)
 				{
 					Joe.setSequence("walk up");
 					Joe.movey(-1);
+					mixer->playSoundOnce("footsteps");
 				}
 				else if (e.key.keysym.sym == SDLK_DOWN)
 				{
 					Joe.setSequence("walk down");
 					Joe.movey(1);
+					mixer->playSoundOnce("footsteps");
 				}
 				else if (e.key.keysym.sym == SDLK_1){
 					ChangeLevel = false;
@@ -195,18 +185,13 @@ int main(int argc, char **argv){
 		// Clear the scene, Render the scene
 		SDL_RenderClear(renderer);
 		if (ChangeLevel == true){
-			ai2.action();
 			sceneManager.updateAll("Level Two");
 			sceneManager.renderAll("Level Two", spriteDirection, isPressed);
 		}
 		else{
-			ai.action();
-			ai1.action();
 			sceneManager.updateAll("Level One");
 			sceneManager.renderAll("Level One", spriteDirection, isPressed);
 		}
-
-		
 		SDL_RenderPresent(renderer);
 		
 	}
