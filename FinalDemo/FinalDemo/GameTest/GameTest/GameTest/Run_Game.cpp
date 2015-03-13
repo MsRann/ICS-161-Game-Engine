@@ -177,7 +177,14 @@ int main(int argc, char **argv){
 
 	// DEON'S BUTTON CODE
 	int x = SCREEN_WIDTH - 50, y = SCREEN_HEIGHT - 50, w = 50, h = 50;
-	std::function<void()> f = [&]() {ChangeLevel = !ChangeLevel; };
+	std::function<void()> f = [&]() 
+	{
+		ChangeLevel = !ChangeLevel;
+		if (!ChangeLevel)
+			mixer->playMusic("intro");
+		else
+			mixer->playMusic("haunted");
+	};
 	Button b(renderer, resPath + "button.png", f);
 
 	b.setDimension(x, y, w, h);
@@ -273,6 +280,7 @@ int main(int argc, char **argv){
 				movey /= length;
 				Joe.movex(movex);
 				Joe.movey(movey);
+
 				if (movex != 0 || movey != 0){
 					Joe.move_normalized(movex, movey, 1.0f);
 				}	
@@ -299,10 +307,7 @@ int main(int argc, char **argv){
 		// DEON'S BUTTON CODE
 		b.setDimension(x, y, w, h);
 		b.drawButton();
-		SDL_RenderPresent(renderer);
-
-
-		
+		SDL_RenderPresent(renderer);	
 	}
 
 	
