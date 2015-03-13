@@ -1,31 +1,33 @@
-#ifndef GAMEOBJECT_HPP
-#define GAMEOBJECT_HPP
+#pragma once
 #include "SDL.h"
 #include <string>
 #include <vector>
 #include <map>
+using namespace std;
 
 class GameObject
 {
 public:
-	GameObject::GameObject(int xpos,int ypos,SDL_Renderer* ren );
-	GameObject::GameObject(int xpos,int ypos,int width, int height, SDL_Renderer* ren);
-	GameObject::GameObject(int xpos,int ypos,int width, int height,SDL_Rect* border, SDL_Renderer* ren);
+	GameObject::GameObject(string name, float xpos,float ypos,SDL_Renderer* ren );
+	GameObject::GameObject(string name, float xpos, float ypos, float width, float height, SDL_Renderer* ren);
+	GameObject::GameObject(string name, float xpos, float ypos, float width, float height, SDL_Rect* border, SDL_Renderer* ren);
 	~GameObject(void);
 
 	SDL_Renderer* getRenderer();
 
-	int getX();
-	int getY();
+	string getName();
 
-	void setX(int newX);
-	void setY(int newY);
+	float getX();
+	float getY();
 
-	int getWidth();
-	void setWidth(int newWidth);
+	void setX(float newX);
+	void setY(float newY);
 
-	int getHeight();
-	void setHeight(int newHeight);
+	float getWidth();
+	void setWidth(float newWidth);
+
+	float getHeight();
+	void setHeight(float newHeight);
 	
 	void setCollidable(bool state);
 	bool getCollidable();
@@ -46,11 +48,13 @@ public:
 	bool getIfShowingBorder();
 
 	//not allowed to be set beyond border if there is one
-	void setPos(int x, int y);
+	void setPos(float x, float y);
 	//doesn't allow movement past border in x if there is one
-	void movex(int delta);
+	void movex(float delta);
 	//doesn't allow movement past border in y if there is one
-	void movey(int delta);
+	void movey(float delta);
+
+	void move_normalized(float x, float y, float speed);
 	
 	struct updateToDo{
 		std::string type;
@@ -58,10 +62,10 @@ public:
 	};
 	std::vector<updateToDo> updates;
 private:
-	int x, y,width,height;
+	string name;
+	float x, y, width, height;
 	bool collidable;
 	SDL_Rect* border;
 	bool displayBorder;
 	SDL_Renderer* ren;
 };
-#endif //GAMEOBJECT_HPP

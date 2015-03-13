@@ -160,15 +160,11 @@ void Sprite::show(){
 
 		SDL_Rect showFrame = {frames[sequenceList[currSequence].at(sequenceIndex)].x,frames[sequenceList[currSequence].at(sequenceIndex)].y,getWidth(),getHeight()};
 		renderTexture(frames[sequenceList[currSequence].at(sequenceIndex)].texture,getRenderer(),getX(),getY(),&showFrame);
-	
-
-		if (getIfShowingBorder() && getBorder() != nullptr){
-			SDL_RenderDrawRect(getRenderer(), getBorder());
-		}
 	}
 }
 
 void Sprite::render() {
+	GameObject::render();
 	show();
 }
 

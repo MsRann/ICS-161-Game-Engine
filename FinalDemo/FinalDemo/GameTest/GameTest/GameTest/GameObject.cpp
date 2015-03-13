@@ -1,18 +1,20 @@
 #include "GameObject.h"
+#include "string"
+using namespace std;
 
-GameObject::GameObject(int xpos,int ypos,SDL_Renderer* ren ):x(xpos), y(ypos), ren(ren){
+GameObject::GameObject(string name, float xpos, float ypos, SDL_Renderer* ren) :name(name), x(xpos), y(ypos), ren(ren){
 	displayBorder = false;
 	border = nullptr;
 	width = 0; 
 	height = 0;
 }
-GameObject::GameObject(int xpos,int ypos,int width, int height, SDL_Renderer* ren ):x(xpos), y(ypos), ren(ren),width(width),height(height){
+GameObject::GameObject(string name, float xpos, float ypos, float width, float height, SDL_Renderer* ren) :name(name), x(xpos), y(ypos), ren(ren), width(width), height(height){
 	displayBorder = false;
 	border = nullptr;
 }
 
 
-GameObject::GameObject(int xpos,int ypos,int width, int height,SDL_Rect* border, SDL_Renderer* ren): x(xpos), y(ypos), ren(ren),width(width),height(height),border(border){
+GameObject::GameObject(string name, float xpos, float ypos, float width, float height, SDL_Rect* border, SDL_Renderer* ren) :name(name), x(xpos), y(ypos), ren(ren), width(width), height(height), border(border){
 	if (border != nullptr && (border->h < height || border->w < width)){
 		this->border = nullptr;
 		SDL_Log("Border not valid size. Border now set to null\n");
@@ -34,35 +36,39 @@ SDL_Renderer* GameObject::getRenderer(){
 	return ren;
 }
 
-int GameObject::getX(){
+string GameObject::getName(){
+	return name;
+}
+
+float GameObject::getX(){
 	return x;
 }
 
-void GameObject::setX(int newX){
+void GameObject::setX(float newX){
 	x = newX;
 }
 
-int GameObject::getY(){
+float GameObject::getY(){
 	return y;
 }
 
-void GameObject::setY(int newY){
+void GameObject::setY(float newY){
 	y =  newY;
 }
 
-int GameObject::getWidth(){
+float GameObject::getWidth(){
 	return width;
 }
 
-void GameObject::setWidth(int newWidth){
+void GameObject::setWidth(float newWidth){
 	width = newWidth;
 }
 
-int GameObject::getHeight(){
+float GameObject::getHeight(){
 	return height;
 }
 
-void GameObject::setHeight(int newHeight){
+void GameObject::setHeight(float newHeight){
 	height = newHeight;
 }
 
@@ -86,11 +92,13 @@ void GameObject::update(){
 }
 
 void GameObject::render(){
-
+	if (getIfShowingBorder() && getBorder() != nullptr){
+		SDL_RenderDrawRect(getRenderer(), getBorder());
+	}
 }
 
 
-void GameObject::setPos(int x, int y){
+void GameObject::setPos(float x, float y){
 	//within the border
 	if (border == nullptr ||  (x >= border->x && x <= border->x + border->w - getWidth() &&
 			y >= border->y && y <= border->y + border->h - getHeight())){
@@ -102,8 +110,8 @@ void GameObject::setPos(int x, int y){
 }
 
 //Takes into account the width of the sprite and doesn't let the entire sprite out of the border
-void GameObject::movex(int delta){
-	int temp = x + delta;
+void GameObject::movex(float delta){
+	float temp = x + delta;
 
 	//check if a border is set
 	if (border != nullptr){
@@ -117,9 +125,9 @@ void GameObject::movex(int delta){
 }
 
 //Takes into account the height of the sprite and doesn't let the entire sprite out of the border
-void GameObject::movey(int delta){
+void GameObject::movey(float delta){
 		
-	int temp = y + delta;
+	float temp = y + delta;
 
 	//check if a border is set
 	if (border != nullptr){
@@ -130,6 +138,14 @@ void GameObject::movey(int delta){
 	}
 	updateToDo newUpdate = {"y",std::to_string(temp)};
 	updates.push_back(newUpdate);
+}
+
+void GameObject::move_normalized(float x, float y, float speed){
+	float len = speed/sqrt(x*x + y*y);
+	x *= len;
+	y *= len;
+	movex(x);
+	movey(y);
 }
 
 void GameObject::setBorder(SDL_Rect* newBorder){
