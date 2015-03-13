@@ -12,6 +12,7 @@
 #include "AudioMixer.h"
 #include "AI.h"
 #include "Button.h"
+#include "Texty.h"
 
 //#include "ResManager.h"
 #include <string>
@@ -163,6 +164,10 @@ int main(int argc, char **argv){
 	mixer->addMusic("haunted", "haunted_house.mp3");
 	mixer->playMusic("intro");
 
+	// ADDING TEXT
+	Texty* sceneTitle = new Texty(renderer, resPath + "Spaceship Bullet.ttf", 36, true, { 196, 32, 32, 0 });
+	std::string sceneName = "The Laboratory";
+
 	SDL_RenderPresent(renderer);
 
 	SDL_Event e;
@@ -185,9 +190,15 @@ int main(int argc, char **argv){
 	{
 		ChangeLevel = !ChangeLevel;
 		if (!ChangeLevel)
+		{
 			mixer->playMusic("intro");
+			sceneName = "The Laboratory";
+		}
 		else
+		{
 			mixer->playMusic("haunted");
+			sceneName = "The Haunted Mansion";
+		}
 	};
 	Button b(renderer, resPath + "button.png", f);
 
@@ -321,6 +332,12 @@ int main(int argc, char **argv){
 		// DEON'S BUTTON CODE
 		b.setDimension(x, y, w, h);
 		b.drawButton();
+
+		if (!ChangeLevel)
+			sceneTitle->write(sceneName.c_str(), SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT - 40);
+		else
+			sceneTitle->write(sceneName.c_str(), SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT - 40);
+		
 		SDL_RenderPresent(renderer);	
 	}
 
