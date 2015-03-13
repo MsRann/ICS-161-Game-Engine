@@ -16,12 +16,12 @@ class Sprite : public GameObject
 {
 public:
 	//By default borders are set to null
-	Sprite(int x, int y, int width, int height, SDL_Renderer* ren);
+	Sprite(std::string name,float x, float y, float width, float height, SDL_Renderer* ren);
 
 	//new constructor that specifies a rectangle border that the sprite cannot get through
 	//if the border is invalid it notifies the programmer that it didn't set one
 	//if it is valid, the current x and y are set to be within the border and at the top left
-	Sprite(int x, int y, int width, int height, SDL_Rect* border, SDL_Renderer* ren);
+	Sprite(std::string name, float x, float y, float width, float height, SDL_Rect* border, SDL_Renderer* ren);
 	
 	~Sprite(void);
 

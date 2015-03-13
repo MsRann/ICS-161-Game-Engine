@@ -7,7 +7,7 @@
 #include <Windows.h>
 #include "SDL_image.h"
 #include "SDL.h"
-#include "cleanup.h"
+//#include "cleanup.h"
 #include "res_path.h"
 
 
@@ -82,8 +82,8 @@ int main(int argc, char **argv){
 	//Scientist Bob3 = Scientist(spritesheetTest, renderer, 300, 200, true);
 	//Scientist Bob4 = Scientist(spritesheetTest, renderer, 300, 250, true);
 	//Scientist Bob5 = Scientist(spritesheetTest, renderer, 300, 50, true);
-	Sprite Joe = Sprite(100, 100, 14, 20, renderer);
-	Sprite Bob = Sprite(200, 200, 14, 20, renderer);
+	Sprite Joe = Sprite("Joe",100, 100, 14, 20, renderer);
+	Sprite Bob = Sprite("Bob",200, 200, 14, 20, renderer);
 	sceneManager.addGameObjectToScene("Level One", &Joe);
 	sceneManager.addGameObjectToScene("Level Two", &Bob);
 

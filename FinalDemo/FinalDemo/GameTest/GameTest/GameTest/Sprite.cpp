@@ -58,7 +58,7 @@ void renderTexture(SDL_Texture *tex, SDL_Renderer *ren, int x, int y,
 }
 
 
-Sprite::Sprite(int x, int y, int width, int height, SDL_Renderer* ren) : GameObject(x,y,width,height,ren){
+Sprite::Sprite(std::string name, float x, float y, float width, float height, SDL_Renderer* ren) : GameObject(name,x,y,width,height,ren){
 	currSequence = "default";
 	
 	sequenceIndex = 0;
@@ -67,8 +67,8 @@ Sprite::Sprite(int x, int y, int width, int height, SDL_Renderer* ren) : GameObj
 
 //throws an error when border is too small and set border to a nullptr
 //sets the sprite position to the border position so it is not automatically out of the border
-Sprite::Sprite(int x, int y, int width, int height,  SDL_Rect* border,SDL_Renderer* ren) 
-	: GameObject(x,y,width,height,border,ren){
+Sprite::Sprite(std::string name,float x, float y, float width, float height,  SDL_Rect* border,SDL_Renderer* ren) 
+	: GameObject(name,x,y,width,height,border,ren){
 	currSequence = "default";
 	sequenceIndex = 0;
 	last_seq = "";
