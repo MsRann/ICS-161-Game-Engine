@@ -13,7 +13,7 @@
 #include "AI.h"
 #include "Button.h"
 
-
+//#include "ResManager.h"
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -176,12 +176,11 @@ int main(int argc, char **argv){
 	//const std::string 
 
 	// DEON'S BUTTON CODE
-	/*resPath = getResourcePath("GameTest") + "button.png";
-	int x = 100, y = 100, w = 200, h = 100;
-	std::function<void()> f = [&]() {x += 20; y += 20; };
-	Button b(renderer, resPath, f);
+	int x = SCREEN_WIDTH - 50, y = SCREEN_HEIGHT - 50, w = 50, h = 50;
+	std::function<void()> f = [&]() {ChangeLevel = !ChangeLevel; };
+	Button b(renderer, resPath + "button.png", f);
 
-	b.setDimension(x, y, w, h);*/
+	b.setDimension(x, y, w, h);
 
 	std::string spriteDirection = "hi mom";
 	while (!quit){
@@ -274,9 +273,12 @@ int main(int argc, char **argv){
 				movey /= length;
 				Joe.movex(movex);
 				Joe.movey(movey);
+				if (movex != 0 || movey != 0){
+					Joe.move_normalized(movex, movey, 1.0f);
+				}	
 			}
 			// DEON'S BUTTON CODE
-			//b.handleEvents(&e);
+			b.handleEvents(&e);
 		}
 
 		// Clear the scene, Render the scene
@@ -295,8 +297,8 @@ int main(int argc, char **argv){
 			sceneManager.renderAll("Level One", spriteDirection, isPressed);
 		}
 		// DEON'S BUTTON CODE
-		//b.setDimension(x, y, w, h);
-		//b.drawButton();
+		b.setDimension(x, y, w, h);
+		b.drawButton();
 		SDL_RenderPresent(renderer);
 
 
