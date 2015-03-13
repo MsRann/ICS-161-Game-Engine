@@ -171,6 +171,8 @@ int main(int argc, char **argv){
 	//Joe.renderScientist(spriteDirection, false);
 
 	//const std::string 
+
+	// DEON'S BUTTON CODE
 	/*resPath = getResourcePath("GameTest") + "button.png";
 	int x = 100, y = 100, w = 200, h = 100;
 	std::function<void()> f = [&]() {x += 20; y += 20; };
@@ -186,10 +188,9 @@ int main(int argc, char **argv){
 			}
 			isPressed = false; // resets
 
-			float movex = 0;
-			float movey = 0;
 			if (e.type == SDL_KEYDOWN){
-				
+				float movex = 0;
+				float movey = 0;
 
 				if (e.key.keysym.sym == SDLK_RIGHT)
 				{
@@ -228,14 +229,20 @@ int main(int argc, char **argv){
 				else if (e.key.keysym.sym == SDLK_2){
 					ChangeLevel = true;
 				}
-				Joe.move_normalized(movex, movey, 1.0f);
+
+				//Joe.move_normalized(movex, movey, 1.0f);
 
 				//std::cout << "x = " << movex << "y = " << movey << std::endl;
 				//Joe.movex(movex);
 				//Joe.movey(movey);
 
+				float length = sqrt(movex*movex + movey*movey);
+				movex /= length;
+				movey /= length;
+				Joe.movex(movex);
+				Joe.movey(movey);
 			}
-
+			// DEON'S BUTTON CODE
 			//b.handleEvents(&e);
 		}
 
@@ -254,7 +261,7 @@ int main(int argc, char **argv){
 			sceneManager.updateAll("Level One");
 			sceneManager.renderAll("Level One", spriteDirection, isPressed);
 		}
-
+		// DEON'S BUTTON CODE
 		//b.setDimension(x, y, w, h);
 		//b.drawButton();
 		SDL_RenderPresent(renderer);
