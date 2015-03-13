@@ -28,6 +28,9 @@ void SceneManager::updateAll(std::string sceneName){
 	}
 }
 
+Scene SceneManager::getScene(std::string sceneName){
+	return SceneMap[sceneName];
+}
 
 
 void SceneManager::renderAll(std::string sceneName, std::string sequence, bool moving){

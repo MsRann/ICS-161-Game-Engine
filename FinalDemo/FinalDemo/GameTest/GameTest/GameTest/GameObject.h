@@ -60,9 +60,11 @@ public:
 		std::string type;
 		std::string change;
 	};
+
+	string name;
+
 	std::vector<updateToDo> updates;
 private:
-	string name;
 	float x, y, width, height;
 	bool collidable;
 	SDL_Rect* border;

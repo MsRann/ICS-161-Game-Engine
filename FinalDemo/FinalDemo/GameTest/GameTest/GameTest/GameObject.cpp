@@ -1,5 +1,6 @@
 #include "GameObject.h"
 #include "string"
+#include <iostream>
 using namespace std;
 
 GameObject::GameObject(string name, float xpos, float ypos, SDL_Renderer* ren) :name(name), x(xpos), y(ypos), ren(ren){
@@ -21,6 +22,7 @@ GameObject::GameObject(string name, float xpos, float ypos, float width, float h
 	}else{
 		//place sprite in the same x and y in border
 		if (border != nullptr){
+			std::cout << "no" << std::endl;
 			setX(border->x);
 			setY(border->y);
 		}

@@ -31,6 +31,8 @@ public:
 
 	void updateAll(std::string sceneName);
 
+	Scene getScene(std::string sceneName);
+
 private:
 	SDL_Renderer* ren;
 
