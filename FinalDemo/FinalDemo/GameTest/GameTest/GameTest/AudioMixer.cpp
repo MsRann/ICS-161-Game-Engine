@@ -81,6 +81,7 @@ void AudioMixer::addMusic(std::string musicName, std::string fileName)
 
 void AudioMixer::playMusic(std::string musicName)
 {
+	Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
 	Mix_PlayMusic(musicList[musicName], -1);
 }
 

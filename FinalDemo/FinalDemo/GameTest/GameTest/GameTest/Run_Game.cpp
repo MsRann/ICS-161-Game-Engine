@@ -158,7 +158,10 @@ int main(int argc, char **argv){
 
 	// ADDING AUDIO SOUNDS
 	AudioMixer *mixer = new AudioMixer();
-	mixer->addSound("footsteps", "footsteps.wav");
+	mixer->addSound("footsteps", "footsteps_AMP.wav");
+	mixer->addMusic("intro", "adventure.mp3");
+	mixer->addMusic("haunted", "haunted_house.mp3");
+	mixer->playMusic("intro");
 
 	SDL_RenderPresent(renderer);
 
@@ -223,11 +226,41 @@ int main(int argc, char **argv){
 						mixer->playSoundOnce("footsteps");
 				}
 
+				if (e.key.keysym.sym == SDLK_p)
+				{
+					//If there is no music playing
+					if (!mixer->isMusicPlaying())
+					{
+						if (!ChangeLevel)
+							mixer->playMusic("intro");
+						if (ChangeLevel)
+							mixer->playMusic("haunted");
+					}
+					//If music is being played
+					else
+					{
+						//If the music is paused
+						if (mixer->isMusicPaused())
+						{
+							//Resume the music
+							mixer->resumeMusic();
+						}
+						//If the music is playing
+						else
+						{
+							//Pause the music
+							mixer->pauseMusic();
+						}
+					}
+				}
+
 				if (e.key.keysym.sym == SDLK_1){
 					ChangeLevel = false;
+					mixer->playMusic("intro");
 				}
 				else if (e.key.keysym.sym == SDLK_2){
 					ChangeLevel = true;
+					mixer->playMusic("haunted");
 				}
 
 				//Joe.move_normalized(movex, movey, 1.0f);
